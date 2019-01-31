@@ -1,4 +1,4 @@
-SUBROUTINE JCLARK (DS,DL,TL,KERF,V)
+subroutine calcLOGjclark(diameterSmall, diameterLarge, totalLen, KERF, volume)
 !*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 ! THIS SUBROUTINE WAS WRITTEN BY J.E.BRICKELL OF THE U.S.FOREST SERVICE
 !TO CALCULATE BOARD FOOT VOLUME OF SAWLOGS BY THE INTERNATIONAL RULE.
@@ -10,51 +10,48 @@ SUBROUTINE JCLARK (DS,DL,TL,KERF,V)
 !      KERF <0, OR = 0, IF KERF ASSUMPTION IS 1/8 INCH
 !      V    = LOG VOLUME RETURNED TO THE CALLING PROGRAM
 !*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-V=0.0
-!IF TOTAL LOG LENGTH IS LESS THAN FOUR FEET NO BOARD FOOT VOLUME WILL BE
-!COMPUTED.
-IF(TL-4.0)10,1,1
-!IF THE LOG’S LARGE END DIAMETER IS FURNISHED TO JCLARK A TAPER RATE
-!WILL BE COMPUTED. IF DL=0 THE STANDARD ASSUMPTION OF 1/2 INCH PER 4
-!FEET OF LOG LENGTH WILL BE USED.
-1 IF(DL)3,3,2
-2 T=4.0*(DL-DS)/TL
-GO TO 4
-3 T=0.5
-!THE FOLLOWING LOOP (THROUGH STATEMENT 5) FINDS OUT HOW MANY FULL 4
-!FOOT SEGMENTS THE LOG CONTAINS.
-4 DO 5 I=1,20
-IF(TL-FLOAT(4*I))6,5,5
-5 CONTINUE
-6 L=I-1
-SL=FLOAT(4*L)
-!THE FOLLOWING STATEMENT MOVES THE SCALING DIAMETER DOWN TO THE END OF
-!THE 4 FOOT SEGMENTS AND INCREASES IT ACCORDING TO TAPER.
-D=DS+(T/4.0)*(TL-SL)
-!THE FOLLOWING LOOP (THROUGH STATEMENT 7) FINDS OUT HOW MANY FULL FEET
-!OF LENGTH ARE IN THE SEGMENT LESS THAN 4 FEET LONG.
-DO 7 I=1,4
-XI=FLOAT(I)
-IF(SL-TL+XI)7,7,8
-7 CONTINUE
-!THE NEXT THREE STATEMENTS CALCULATE LOG VOLUME IN THE 1, 2, OR 3 FOOT
-!SEGMENT AT THE SMALL END OF THE LOG.
-8 XL=XI-1.0
-DEX=DS+(T/4.0)*(TL-SL-XL)
-VADD=0.055*XL*DEX*DEX-0.1775*XL*DEX
-!THE FOLLOWING LOOP (THROUGH 9) CALCULATES VOLUME IN THE PORTION OF
-!THE LOG CONTAINING WHOLE 4 FOOT SEGMENTS.
-DO 9 I=1,L
-DC=D+T*FLOAT(I-1)
-9 V=V+0.22*DC*DC-0.71*DC
-V=V+VADD
-!IF ‘KERF’ IS GREATER THAN ZERO, INTERNATIONAL 1/8 INCH VOLUME AS
-!COMPUTED ABOVE WILL BE CONVERTED TO INTERNATIONAL 1/4 INCH VOLUME.
-IF (KERF)10,10,11
-10 RETURN
-11 V=0.905*V
-RETURN
-END
+
+implicit none
+
+real, intent(in) :: diameterSmall, diameterLarge, totalLen
+integer, intent(in) :: KERF
+real, intent(out) :: volume
+
+real :: taper, diam, dExtra, extraVol, tempD
+integer :: fullSegments, remainingFeet, i
+
+volume=0.0
+
+! Can't do a length < 4ft
+if (totalLen < 4.0) return
+
+! Calculate taper rate
+if (diameterLarge <= 0.0) then
+    taper = 0.5
+else
+    taper = 4.0 * (diameterLarge - diameterSmall) / totalLen
+end if
+
+! Find full 4 foot segments and remaining length
+fullSegments = floor(totalLen / 4.0)
+remainingFeet = floor(mod(totalLen, 4.0))
+
+! Calculate volume of extra segments of log
+dExtra = diameterSmall + (taper / 4.0) * (totalLen - fullSegments * 4.0 - remainingFeet)
+extraVol = 0.055 * remainingFeet * dExtra ** 2 - 0.1775 * remainingFeet * dExtra
+
+! Calculate volume of 4 foot sections
+diam = diameterSmall + (taper/4.0)*(totalLen - (fullSegments * 4.0))
+do i = 0, fullSegments - 1
+    tempD = diam + taper*i
+    volume = volume + 0.22 * tempD **2 - 0.71 * tempD
+end do
+volume = volume + extraVol
+
+! Change to to 1/4" saw kerf
+if (KERF > 0) volume = 0.905*volume
+
+end subroutine calcLOGjclark
 
 subroutine getLOGdata(diameterSmall, diameterLarge, totalLen, KERF)
 
@@ -97,7 +94,7 @@ real :: DS, DL, TL, V
 integer :: KERF
 do
     call getLOGdata(DS, DL, TL, KERF)
-    call JCLARK(DS, DL, TL, KERF, V)
+    call calcLOGjclark(DS, DL, TL, KERF, V)
     write(*,*) V
     call calcLOGvolume(DS, DL, TL, V)
     write(*,*) 'volume is ', V
