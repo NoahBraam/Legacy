@@ -1,14 +1,10 @@
 subroutine calcLOGjclark(diameterSmall, diameterLarge, totalLen, KERF, volume)
 !*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 ! THIS SUBROUTINE WAS WRITTEN BY J.E.BRICKELL OF THE U.S.FOREST SERVICE
-!TO CALCULATE BOARD FOOT VOLUME OF SAWLOGS BY THE INTERNATIONAL RULE.
-!VARIABLES IN THE CALLING SEQUENCE ARE:
-!      DS   = LOG’S SCALING DIAMETER (INCHES)
-!      DL   = DIB AT LOG’S LARGE END (INCHES) (0.0 IF 1/2 INCH TAPER)
-!      TL   = TOTAL LOG LENGTH (FEET)
-!      KERF >0 IF KERF ASSUMPTION IS 1/4 INCH
-!      KERF <0, OR = 0, IF KERF ASSUMPTION IS 1/8 INCH
-!      V    = LOG VOLUME RETURNED TO THE CALLING PROGRAM
+! TO CALCULATE BOARD FOOT VOLUME OF SAWLOGS BY THE INTERNATIONAL RULE.
+! 
+! Subroutine was rewritten by Noah Braam using more modern
+! Fortran conventions.
 !*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 implicit none
@@ -52,6 +48,7 @@ volume = volume + extraVol
 if (KERF > 0) volume = 0.905*volume
 
 end subroutine calcLOGjclark
+
 
 subroutine getLOGdata(diameterSmall, diameterLarge, totalLen, KERF)
 
