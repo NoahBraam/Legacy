@@ -19,7 +19,10 @@ integer :: fullSegments, remainingFeet, i
 volume=0.0
 
 ! Can't do a length < 4ft
-if (totalLen < 4.0) return
+if (totalLen < 4.0) then
+    write(*,*)'Error, log needs to be at least 4ft long'
+    return
+end if
 
 ! Calculate taper rate
 if (diameterLarge <= 0.0) then
@@ -94,9 +97,9 @@ integer :: KERF
 do
     call getLOGdata(DS, DL, TL, KERF)
     call calcLOGjclark(DS, DL, TL, KERF, V)
-    write(*,*) V
+    if (V > 0.0) write(*,'(A, F6.2, A)')' ', V,' board feet'
     call calcLOGvolume(DS, DL, TL, V)
-    write(*,*) 'volume is ', V
+    write(*,'(A, F5.2, A)') ' volume is ',V,'m^3'
     write(*,*) 'do you want to go again?(y/n)'
     read(*,*) c
     if (c == 'n') exit
