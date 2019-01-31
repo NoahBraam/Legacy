@@ -2,7 +2,7 @@ subroutine calcLOGjclark(diameterSmall, diameterLarge, totalLen, KERF, volume)
 !*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 ! THIS SUBROUTINE WAS WRITTEN BY J.E.BRICKELL OF THE U.S.FOREST SERVICE
 ! TO CALCULATE BOARD FOOT VOLUME OF SAWLOGS BY THE INTERNATIONAL RULE.
-! 
+!
 ! Subroutine was rewritten by Noah Braam using more modern
 ! Fortran conventions.
 !*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -42,9 +42,11 @@ do i = 0, fullSegments - 1
     tempD = diam + taper*i
     volume = volume + 0.22 * tempD **2 - 0.71 * tempD
 end do
+
+! Combine volume of 4ft sections and remaining volume
 volume = volume + extraVol
 
-! Change to to 1/4" saw kerf
+! Change to to 1/4" saw kerf if needed
 if (KERF > 0) volume = 0.905*volume
 
 end subroutine calcLOGjclark
