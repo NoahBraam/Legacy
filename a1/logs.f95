@@ -15,7 +15,7 @@ program logs
         call calcLOGjclark(DS, DL, TL, KERF, V)
         if (V > 0.0) write(*,'(A, F6.2, A)')' ', V,' board feet'
         call calcLOGvolume(DS, DL, TL, V)
-        write(*,'(A, F5.2, A)') ' volume is ',V,'m^3'
+        if (V > 0.0) write(*,'(A, F5.2, A)') ' volume is ',V,'m^3'
         write(*,*) 'do you want to go again?(y/n)'
         read(*,*) c
         if (c == 'n') exit
@@ -87,8 +87,15 @@ subroutine getLOGdata(diameterSmall, diameterLarge, totalLen, KERF)
     integer, intent(out) :: KERF
 
     ! Reads in user input
-    write(*,*) 'enter small diameter, large diameter, total length and KERF'
-    read(*,*) diameterSmall, diameterLarge, totalLen, KERF
+    write(*,*) 'enter small diameter (inches)'
+    read(*,*) diameterSmall
+    write(*,*) 'enter large diameter (0 for 0.5" taper)'
+    read(*,*) diameterLarge
+    write(*,*) 'enter total length (feet)'
+    read(*,*) totalLen
+    write(*,*) 'enter KERF'
+    read(*,*) KERF
+
 
 end subroutine getLOGdata
 
@@ -120,5 +127,3 @@ subroutine calcLOGvolume(diameterSmall, diameterLarge, totalLen, volume)
     volume = (((pi * mRadLarge * mRadLarge) + (pi * mRadSmall * mRadSmall)) / 2) * mLen
 
 end subroutine calcLOGvolume
-
-
