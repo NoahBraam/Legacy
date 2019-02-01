@@ -90,7 +90,7 @@ volume = (((pi * mRadLarge * mRadLarge) + (pi * mRadSmall * mRadSmall)) / 2) * m
 
 end subroutine calcLOGvolume
 
-PROGRAM logs
+program logs
 character :: c = 'y'
 real :: DS, DL, TL, V
 integer :: KERF
@@ -104,4 +104,4 @@ do
     read(*,*) c
     if (c == 'n') exit
 end do
-END
+end
