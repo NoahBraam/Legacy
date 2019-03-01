@@ -1,8 +1,11 @@
 with ada.Text_IO; use Ada.Text_IO;
 with ada.Integer_Text_IO; use Ada.Integer_Text_IO;
+with Ada.Calendar; use Ada.Calendar;
 with stackadt; use stackadt;
 procedure ackermann is
-    ack, m, n: natural;    
+    ack, m, n: natural;
+    startTime, endTime : Time;
+    milliS : Duration;    
     procedure calcAckermann(ack: out natural; m,n: in natural) is
         pushType : natural range 1..4;
         tempN, tempM, done: natural;
@@ -59,8 +62,12 @@ begin
     get(m);
     put("enter a value for n: ");
     get(n);
+    startTime:= Clock;
     calcAckermann(ack, m, n);
+    endTime:= Clock;
+    milliS:= (endTime - startTime) * 1000;
     put("Ackermann is: ");
-    put(ack, width=>1);
+    put(ack, width=>1); new_line;
+    put_line("Runtime = " & Duration'Image(milliS) & " milliseconds.");
 end ackermann;
 
