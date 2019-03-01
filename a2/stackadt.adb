@@ -1,6 +1,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 package body stackADT is
-    type list is array(1..100000) of natural;
+    type list is array(1..300000) of natural;
     type int_stack is
         record
             item : list;
@@ -10,7 +10,7 @@ package body stackADT is
 
     procedure push(x : in natural) is
     begin
-        if st.top = 100000 then
+        if st.top = 300000 then
             put_line("stack is full");
         else 
             st.top := st.top + 1;
