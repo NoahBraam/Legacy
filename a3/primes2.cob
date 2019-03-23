@@ -1,5 +1,5 @@
 identification division.
-program-id. primes1.
+program-id. primes2.
 environment division.
 input-output section.
 file-control.
@@ -44,20 +44,17 @@ PROCEDURE DIVISION.
     WRITE OUT-LINE FROM TITLE-LINE AFTER ADVANCING 0 LINES.
     WRITE OUT-LINE FROM UNDER-LINE AFTER ADVANCING 1 LINE.
     move 0 to isFinished.
-    display isFinished.
     perform until isFinished = 1
-        display isFinished
-        read INPUT-FILE into IN-CARD at end move 1 to isFinished
-        display isFinished
-        if isFinished = 1
-            continue
-        end-if
+        read INPUT-FILE into IN-CARD 
+            at end move 1 to isFinished
+            not at end
         MOVE IN-N TO N
         display N
         if N > 1
             if N < 4
                 MOVE IN-N TO OUT-N-3
                 WRITE OUT-LINE FROM PRIME-LINE AFTER ADVANCING 1 LINE
+                continue
             else
                 move 2 to R
                 move 0 to innerLoopDone
@@ -66,7 +63,10 @@ PROCEDURE DIVISION.
                     MULTIPLY R BY I
                     if I is not equal to N
                         add 1 to R
-                        if R >= N 
+                        if R < N 
+                            continue
+                        else
+                            move IN-N to OUT-N-3
                             WRITE OUT-LINE FROM PRIME-LINE AFTER ADVANCING 1 LINE
                             move 1 to innerLoopDone
                         end-if
@@ -76,6 +76,7 @@ PROCEDURE DIVISION.
                         move 1 to innerLoopDone
                     end-if
                 end-perform
+                continue
             end-if
         else
             MOVE IN-N TO OUT-N
