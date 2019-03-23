@@ -1,10 +1,16 @@
 identification division.
 program-id. primes1.
-author. Noah Braam.
 environment division.
+input-output section.
 file-control.
-select INPUT-FILE assign to primes.dat
+select INPUT-FILE assign to 'primes.dat'
+ORGANIZATION IS LINE SEQUENTIAL.
+select OUTPUT-FILE assign to 'out.dat'
+ORGANIZATION IS LINE SEQUENTIAL.
 data division.
+file section.
+fd OUTPUT-FILE.
+01 OUT-LINE PICTURE X(81).
 WORKING-STORAGE SECTION.
 77  N  PICTURE S9(9).
 77  R  PICTURE S9(9) USAGE IS COMPUTATIONAL.
