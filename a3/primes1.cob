@@ -1,3 +1,10 @@
+identification division.
+program-id. primes1.
+author. Noah Braam.
+environment division.
+file-control.
+select INPUT-FILE assign to primes.dat
+data division.
 WORKING-STORAGE SECTION.
 77  N  PICTURE S9(9).
 77  R  PICTURE S9(9) USAGE IS COMPUTATIONAL.
