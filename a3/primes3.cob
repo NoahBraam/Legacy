@@ -72,12 +72,13 @@ PROCEDURE DIVISION.
             accept IN-N from SYSIN
             if IN-N = 0
                 move 1 to isFinished
-                continue
+                stop run
             end-if
         end-if
         MOVE IN-N TO N
-        if N = 0
-            exit perform
+        if isFinished = 1
+            CLOSE INPUT-FILE, OUTPUT-FILE
+            stop run
         end-if
         display N
         if N > 1
