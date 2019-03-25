@@ -67,15 +67,17 @@ PROCEDURE DIVISION.
     perform until isFinished = 1
         if userChoice = 2
             read INPUT-FILE into IN-CARD at end move 1 to isFinished
-            MOVE IN-N TO N
         else
             display 'Enter a number (0 to exit)'
             accept IN-N from SYSIN
-            move IN-N to N
-            if N = 0
+            if IN-N = 0
                 move 1 to isFinished
                 continue
             end-if
+        end-if
+        MOVE IN-N TO N
+        if N = 0
+            exit perform
         end-if
         display N
         if N > 1
