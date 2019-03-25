@@ -51,6 +51,7 @@ PROCEDURE DIVISION.
     move 0 to isFinished.
     display 'Do you want to enter primes(1) or enter file names(2)'.
     ACCEPT userChoice FROM SYSIN.
+    *> Make sure choice is valid
     if userChoice > 2
         move 1 to isFinished
         display 'Error, enter a valid number'
@@ -59,6 +60,8 @@ PROCEDURE DIVISION.
         move 1 to isFinished
         display 'Error, enter a valid number'
     end-if.
+
+    *> If file input, ask for files
     if userChoice = 2
         display 'Enter an input file'
         accept infile-name from SYSIN
@@ -70,6 +73,7 @@ PROCEDURE DIVISION.
     end-if.
     
     perform until isFinished = 1
+        *> Read from file or from user.
         if userChoice = 2
             read INPUT-FILE into IN-CARD at end move 1 to isFinished
         else
@@ -81,13 +85,16 @@ PROCEDURE DIVISION.
             end-if
         end-if
         MOVE IN-N TO N
+        *> Close files and end
         if isFinished = 1
             CLOSE INPUT-FILE, OUTPUT-FILE
             stop run
         end-if
+        *> Show value of N
         display N
         if N > 1
             if N < 4
+                *> Prime number, continue to next number.
                 MOVE IN-N TO OUT-N-3
                 if userChoice = 2
                     WRITE OUT-LINE FROM PRIME-LINE AFTER ADVANCING 1 LINE
@@ -99,13 +106,15 @@ PROCEDURE DIVISION.
                 move 2 to R
                 move 0 to innerLoopDone
                 perform until innerLoopDone = 1
-                    compute I=R/N
+                    compute I=N/R
                     MULTIPLY R BY I
                     if I is not equal to N
-                        compute R=R+1
+                        compute R = R + 1
                         if R < N 
+                            *> Not done, keep doing inner loop
                             continue
                         else
+                            *> Prime number, yay!
                             move IN-N to OUT-N-3
                             if userChoice = 2
                                 WRITE OUT-LINE FROM PRIME-LINE AFTER ADVANCING 1 LINE
@@ -115,6 +124,7 @@ PROCEDURE DIVISION.
                             move 1 to innerLoopDone
                         end-if
                     else
+                        *> Not a prime number
                         MOVE IN-N TO OUT-N-2
                         if userChoice = 2
                             WRITE OUT-LINE FROM NOT-A-PRIME-LINE AFTER ADVANCING 1 LINE
@@ -127,6 +137,7 @@ PROCEDURE DIVISION.
                 continue
             end-if
         else
+            *> Error!
             MOVE IN-N TO OUT-N
             if userChoice = 2
                 WRITE OUT-LINE FROM ERROR-MESS AFTER ADVANCING 1 LINE
