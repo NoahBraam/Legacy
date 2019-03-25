@@ -1,16 +1,21 @@
+*> Primes program part 3
+*> This program computes if a number is prime or not.
+*> Noah Braam
+*> 0960202
+
 identification division.
-program-id. primes3.
+    program-id. primes3.
 environment division.
-input-output section.
-file-control.
-select INPUT-FILE assign to dynamic infile-name
-ORGANIZATION IS LINE SEQUENTIAL.
-select OUTPUT-FILE assign to dynamic outfile-name
-ORGANIZATION IS LINE SEQUENTIAL.
+    input-output section.
+    file-control.
+        select INPUT-FILE assign to dynamic infile-name
+        ORGANIZATION IS LINE SEQUENTIAL.
+        select OUTPUT-FILE assign to dynamic outfile-name
+        ORGANIZATION IS LINE SEQUENTIAL.
 data division.
-file section.
-fd OUTPUT-FILE.
-01 OUT-LINE PICTURE X(81).
+    file section.
+    fd OUTPUT-FILE.
+    01 OUT-LINE PICTURE X(81).
 WORKING-STORAGE SECTION.
 77  N  PICTURE S9(9).
 77  R  PICTURE S9(9) USAGE IS COMPUTATIONAL.
@@ -93,10 +98,10 @@ PROCEDURE DIVISION.
                 move 2 to R
                 move 0 to innerLoopDone
                 perform until innerLoopDone = 1
-                    DIVIDE R INTO N GIVING I
+                    compute I=R/N
                     MULTIPLY R BY I
                     if I is not equal to N
-                        add 1 to R
+                        compute R=R+1
                         if R < N 
                             continue
                         else
