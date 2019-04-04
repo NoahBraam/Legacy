@@ -1,16 +1,21 @@
+*> Primes program part 2
+*> This program computes if a number is prime or not.
+*> Noah Braam
+*> 0960202
+
 identification division.
-program-id. primes2.
+    program-id. primes2.
 environment division.
 input-output section.
-file-control.
-select INPUT-FILE assign to 'primes.dat'
-ORGANIZATION IS LINE SEQUENTIAL.
-select OUTPUT-FILE assign to 'out.dat'
-ORGANIZATION IS LINE SEQUENTIAL.
+    file-control.
+        select INPUT-FILE assign to 'primes.dat'
+        ORGANIZATION IS LINE SEQUENTIAL.
+        select OUTPUT-FILE assign to 'out.dat'
+        ORGANIZATION IS LINE SEQUENTIAL.
 data division.
-file section.
-fd OUTPUT-FILE.
-01 OUT-LINE PICTURE X(81).
+    file section.
+        fd OUTPUT-FILE.
+        01 OUT-LINE PICTURE X(81).
 WORKING-STORAGE SECTION.
 77  N  PICTURE S9(9).
 77  R  PICTURE S9(9) USAGE IS COMPUTATIONAL.
@@ -40,18 +45,22 @@ WORKING-STORAGE SECTION.
     02 FILLER PICTURE X(14) VALUE ' ILLEGAL INPUT'.
 
 PROCEDURE DIVISION.
+    *> Open and read files.
     OPEN INPUT INPUT-FILE, OUTPUT OUTPUT-FILE.
     WRITE OUT-LINE FROM TITLE-LINE AFTER ADVANCING 0 LINES.
     WRITE OUT-LINE FROM UNDER-LINE AFTER ADVANCING 1 LINE.
     move 0 to isFinished.
     perform until isFinished = 1
+        *> Read in the file until EOF
         read INPUT-FILE into IN-CARD 
             at end move 1 to isFinished
             not at end
         MOVE IN-N TO N
+        *> Show value of N
         display N
         if N > 1
             if N < 4
+                *> Prime number, continue to next number. 
                 MOVE IN-N TO OUT-N-3
                 WRITE OUT-LINE FROM PRIME-LINE AFTER ADVANCING 1 LINE
                 continue
@@ -59,18 +68,21 @@ PROCEDURE DIVISION.
                 move 2 to R
                 move 0 to innerLoopDone
                 perform until innerLoopDone = 1
-                    DIVIDE R INTO N GIVING I
+                    compute I=N/R
                     MULTIPLY R BY I
                     if I is not equal to N
-                        add 1 to R
-                        if R < N 
+                        compute R = R + 1
+                        if R < N
+                            *> Not done, keep doing inner loop 
                             continue
                         else
+                            *> Prime number, yay!
                             move IN-N to OUT-N-3
                             WRITE OUT-LINE FROM PRIME-LINE AFTER ADVANCING 1 LINE
                             move 1 to innerLoopDone
                         end-if
                     else
+                        *> Not a prime number
                         MOVE IN-N TO OUT-N-2
                         WRITE OUT-LINE FROM NOT-A-PRIME-LINE AFTER ADVANCING 1 LINE
                         move 1 to innerLoopDone
@@ -79,10 +91,10 @@ PROCEDURE DIVISION.
                 continue
             end-if
         else
+            *> Error!
             MOVE IN-N TO OUT-N
             WRITE OUT-LINE FROM ERROR-MESS AFTER ADVANCING 1 LINE
         end-if
     end-perform.
-FINISH.
     CLOSE INPUT-FILE, OUTPUT-FILE.
     STOP RUN.
