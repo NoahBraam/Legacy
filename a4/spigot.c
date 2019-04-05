@@ -2,10 +2,12 @@
 #include <stdio.h>
 
 int main (void) {
+    char fileName[200];
     printf("Enter an output file: ");
-    printf("\n");
+    scanf("%s", fileName);
+    FILE* fp = fopen(fileName, "w+");
     const int n = 1000;
-    int len = 10*n /3;
+    const int len = 10*n /3;
     int i, j, k, q, x, nines, predigit;
     long a[len];
     for (i = 0; i<len; i++) {
@@ -26,22 +28,23 @@ int main (void) {
         if (q == 9) {
             nines = nines + 1;
         } else if (q == 10) {
-            printf("%d", predigit + 1);
+            fprintf(fp, "%d", predigit + 1);
             for (k = 0; k<nines; k++) {
-                printf("%d", 0);
+                fprintf(fp, "%d", 0);
             }
             predigit = 0;
             nines = 0;
         } else {
-            printf("%d", predigit);
+            fprintf(fp, "%d", predigit);
             predigit = q;
             if (nines != 0) {
                 for (k = 0; k<nines; k++) {
-                    printf("%d", 9);
+                    fprintf(fp, "%d", 9);
                 }
                 nines = 0;
             }
         }
     }
-    printf("%d", predigit);
+    fprintf(fp, "%d", predigit);
+    fclose(fp);
 }
