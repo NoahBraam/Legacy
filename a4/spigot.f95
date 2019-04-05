@@ -1,4 +1,11 @@
+!
+! Noah Braam
+! 0960202
+!  This is a Fortran version of the spigot algorithm
+!  originally given to us in Pascal.
+!
 program spigot
+    ! Variable declarations
     implicit none
     integer :: n = 1000
     integer :: len = 3333
@@ -7,6 +14,7 @@ program spigot
 
     character(100) :: line
 
+    ! Read in filename
     write(*,'("Enter a file for output: ")')
     read(*,'(A)') line
     open (unit=20,file=line,action="write",status="replace")
@@ -18,6 +26,7 @@ program spigot
 
     do j = 1, n
         q = 0
+        ! calculate q
         do i = len, 1, -1
             x = 10*a (i) + q*i
             a(i) = mod(x,2*i -1)
@@ -25,6 +34,7 @@ program spigot
         end do
         a (1) = mod(q, 10)
         q = q/10
+        ! Print value of Pi to file
         if (q == 9) then
             nines = nines+1
         else if (q == 10) then
@@ -45,6 +55,7 @@ program spigot
             end if
         end if
     end do
+    ! Print final Pi value and close file
     write(20, '(A)', advance='no') predigit
     close(20)
 end

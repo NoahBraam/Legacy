@@ -1,7 +1,14 @@
+--
+-- Noah Braam
+-- 0960202
+-- This is a Ada version of the spigot algorithm
+-- originally given to us in Pascal.
+--
 with ada.Text_IO; use Ada.Text_IO;
 with ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 
 procedure spigot is
+    -- Variable declarations
     buffer: String (1..100);
     last: Natural;
     n : constant Integer := 1000;
@@ -15,12 +22,14 @@ procedure spigot is
     j: Integer := 0;
     k: Integer := 0;
 begin
+    -- Open outfile
     put("Enter an output file: ");
     get_line(buffer, last);
     Create(outFile, Out_File, buffer);
     i := j;
     j:=k;
     k:=i;
+    -- Init list to 2
     for i in int_range loop
         a(i) := Long_Integer(2);
     end loop;
@@ -28,6 +37,7 @@ begin
     predigit:=0;
     for j in 1..n loop
         q:=0;
+        -- Calculate q
         for i in reverse 1..len loop
             x:= 10*Integer(a(i)) + q*i;
             a(i) := Long_Integer(x mod (2*i-1));
@@ -35,6 +45,7 @@ begin
         end loop;
         a(1) := Long_Integer(q mod 10);
         q := q/10;
+        -- Print Pi character
         if q = 9 then
             nines:= nines+1;
         elsif q = 10 then
@@ -55,6 +66,7 @@ begin
             end if;
         end if;
     end loop;
+    -- Print last Pi character and close file
     put(outFile, predigit, width=>1);
     Close(outFile);
 end spigot;
