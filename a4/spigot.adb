@@ -10,9 +10,11 @@ procedure spigot is
     subtype int_range is Integer range 1..len;
     type LongArray is array(int_range) of Long_integer;
     a : LongArray;
+    outFile: File_Type;
 begin
     put("Enter an output file: ");
     get_line(buffer, last);
+    Create(outFile, Out_File, buffer);
     i:=0;
     for i in int_range loop
         a(i) := Long_Integer(2);
@@ -31,22 +33,23 @@ begin
         if q = 9 then
             nines:= nines+1;
         elsif q = 10 then
-            put(predigit + 1, width=>1);
+            put(outFile, predigit + 1, width=>1);
             for k in 1..nines loop
-                put(0, width=>1);
+                put(outFile, 0, width=>1);
             end loop;
             predigit:= 0;
             nines:= 0;
         else
-            put(predigit, width=>1);
+            put(outFile, predigit, width=>1);
             predigit:=q;
             if nines /= 0 then
                 for k in 1..nines loop
-                    put(9, width=>1);
+                    put(outFile, 9, width=>1);
                 end loop;
                 nines := 0;
             end if;
         end if;
     end loop;
-    put(predigit, width=>1); new_line;
+    put(outFile, predigit, width=>1);
+    Close(outFile);
 end spigot;
