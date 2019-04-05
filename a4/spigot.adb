@@ -6,16 +6,21 @@ procedure spigot is
     last: Natural;
     n : constant Integer := 1000;
     len : constant Integer := 10*n /3;
-    i, j, k, q, x, nines, predigit : Integer;
+    q, x, nines, predigit : Integer;
     subtype int_range is Integer range 1..len;
     type LongArray is array(int_range) of Long_integer;
     a : LongArray;
     outFile: File_Type;
+    i : Integer := 0;
+    j: Integer := 0;
+    k: Integer := 0;
 begin
     put("Enter an output file: ");
     get_line(buffer, last);
     Create(outFile, Out_File, buffer);
-    i:=0;
+    i := j;
+    j:=k;
+    k:=i;
     for i in int_range loop
         a(i) := Long_Integer(2);
     end loop;
