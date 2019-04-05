@@ -2,6 +2,8 @@ with ada.Text_IO; use Ada.Text_IO;
 with ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 
 procedure spigot is
+    buffer: String (1..100);
+    last: Natural;
     n : constant Integer := 1000;
     len : constant Integer := 10*n /3;
     i, j, k, q, x, nines, predigit : Integer;
@@ -9,6 +11,8 @@ procedure spigot is
     type LongArray is array(int_range) of Long_integer;
     a : LongArray;
 begin
+    put("Enter an output file: ");
+    get_line(buffer, last);
     i:=0;
     for i in int_range loop
         a(i) := Long_Integer(2);
