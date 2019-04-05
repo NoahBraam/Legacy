@@ -5,6 +5,11 @@ program spigot
     integer, dimension (1:3333) :: a
     integer :: i, j, k, q, x, nines, predigit
 
+    character(100) :: line
+
+    write(*,'("Enter a file for output: ")')
+    read(*,'(A)') line
+    open (unit=20,file=line,action="write",status="replace")
     do i = 1, len
         a (i) = 2
     end do
@@ -23,22 +28,23 @@ program spigot
         if (q == 9) then
             nines = nines+1
         else if (q == 10) then
-            ! write
+            write(20, '(A)', advance='no') predigit+1
             do k = 1, nines
-                !write
+                write(20, '(A)', advance='no') 0
             end do
             predigit = 0
             nines = 0
         else
-            !write
-            predigit = 1
+            write(20, '(A)', advance='no') predigit
+            predigit = q
             if (nines /= 0) then
                 do k = 1, nines
-                    ! write 9
+                    write(20, '(A)', advance='no') 9
                 end do
                 nines = 0
             end if
         end if
     end do
-    !write again
+    write(20, '(A)', advance='no') predigit
+    close(20)
 end
